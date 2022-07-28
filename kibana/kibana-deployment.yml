@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - name: kibana
+        image: kibana:5.6.4
+        resources: {}
+        ports:
+        - name: traffic
+          containerPort: 5601
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: SERVER_NAME
+          value: "<KIBANA_HOSTNAME>"
+        - name: ELASTICSEARCH_URL
+          value: "http://<ELASTICSEARCH_SERVICE>.<NAMESPACE>.svc.cluster.local:9200"
+        - name: SERVER_HOST
+          value: "0"
